@@ -1,5 +1,6 @@
 name: Example Build
-# При интеграции должны быть права на запись у actions
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/workflows/Example-Build.yml
+# When integrating, actions must have write permissions
 
 on:
   release:

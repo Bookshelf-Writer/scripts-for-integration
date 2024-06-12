@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/push-hook.sh
 echo "[HOOK]" "Push"
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Original source:
 
 dir_path=""
 file_name="const.go"

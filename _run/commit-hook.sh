@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/commit-hook.sh
 echo "[HOOK]" "Commit"
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"

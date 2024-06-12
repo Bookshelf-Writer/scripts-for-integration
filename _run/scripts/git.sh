@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Original source:
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # Место расположения скрипта
 hooks_dir="$(dirname "$script_dir")"

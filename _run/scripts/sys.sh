@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Original source:
 
 declare -a required_values=("name.txt" "ver.txt") # Обязательные файлы в values
 declare -a required_scripts=("sys.sh" "git.sh") # Обязательные файлы в scripts
