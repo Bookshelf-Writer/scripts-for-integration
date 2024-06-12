@@ -1,5 +1,5 @@
 #!/bin/bash
-# Original source:
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/scripts/sys.sh
 
 declare -a required_values=("name.txt" "ver.txt") # Обязательные файлы в values
 declare -a required_scripts=("sys.sh" "git.sh") # Обязательные файлы в scripts

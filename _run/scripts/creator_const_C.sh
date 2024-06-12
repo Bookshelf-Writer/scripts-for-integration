@@ -1,5 +1,5 @@
 #!/bin/bash
-# Original source:
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/scripts/creator_const_C.sh
 
 dir_path=""
 file_name="const.h"

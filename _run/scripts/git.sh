@@ -1,5 +1,5 @@
 #!/bin/bash
-# Original source:
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/scripts/git.sh
 
 script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"  # Место расположения скрипта
 hooks_dir="$(dirname "$script_dir")"
