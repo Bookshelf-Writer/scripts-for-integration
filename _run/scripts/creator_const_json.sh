@@ -1,5 +1,6 @@
 #!/bin/bash
 # Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/scripts/creator_const_json.sh
+# bash "$script_dir/creator_const_json.sh"
 
 dir_path=""
 file_name="const.json"
