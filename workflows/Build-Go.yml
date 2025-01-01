@@ -1,26 +1,39 @@
-name: Example Build
-# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/workflows/Example-Build.yml
+name: Release Build
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/workflows/Build-Go.yml
 # When integrating, actions must have write permissions
 
 on:
   release:
+    branches:
+      - 'main'
     types: [created]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
-    name: "Build ${{ github.ref }}"
+    name: "Build  [${{ matrix.os }}]"
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ ubuntu-latest, windows-latest ]
+        go-version: [1.23]
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ matrix.go-version }}
       ########################################################################################################################
 
       - name: Load Info from Build
+        if: ${{ matrix.os != 'windows-latest' }}
         run: |
           nameBuild=$(./_run/scripts/sys.sh -n)
           versionBuild=$(./_run/scripts/sys.sh -v)
@@ -31,49 +44,57 @@ jobs:
           echo "NAME: $nameBuild"
           echo "VER: $versionBuild"
 
-      - name: Check Tag
+      - name: Check Tag [linux]
+        if: ${{ matrix.os != 'windows-latest'}}
         run: |
           if [[ "${{ github.event.release.tag_name }}" != "${{ env.BUILD_VER }}" ]]; then
             curl -X DELETE -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             "https://api.github.com/repos/${{ github.repository }}/releases/${{ github.event.release.id }}"
-            
+          
             echo "::error ::Incorrect release tag. Should match the [${{ env.BUILD_VER }}]."
             exit 1
           fi
 
       ########################################################################################################################
 
-      # example of custom functionality
-      - name: Upload [README]
+      - name: Run build
+        run: |
+          go mod tidy
+          go build -ldflags="-s -w" -o buildGo
+
+      - name: Set [win] namespace
+        if: ${{ matrix.os == 'windows-latest' }}
+        run: echo "FILE_EX=exe" | Out-File -FilePath $env:GITHUB_ENV -Append -Encoding utf8
+        shell: pwsh
+
+      - name: Set [linux] namespace
+        if: ${{ matrix.os == 'ubuntu-latest' }}
+        run: |
+          echo "FILE_EX=bin" >> $GITHUB_ENV
+          chmod +x buildGo        
+
+      - name: Save build
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: README.md
-          asset_name: "${{ env.BUILD_NAME }}.${{ env.BUILD_VER }}.README.md"
+          asset_path: buildGo
+          asset_name: "${{ env.BUILD_NAME }}.${{ env.BUILD_VER }}.${{ env.FILE_EX }}"
           asset_content_type: application/octet-stream
 
-      ########################################################################################################################
+   ########################################################################################################################
 
-      - name: Checkout to the [master]
-        run: |
-          if git branch -a | grep -qw "origin/master"; then
-            git checkout master
-          else
-            echo "No known branch found!"
-            exit 1
-          fi
-
-      - name: Push new version
+      - name: Push new version [linux]
+        if: ${{ matrix.os == 'ubuntu-latest'}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           new_version=$(./_run/scripts/sys.sh --increment --minor)
-          
+
           git add ./_run/values/ver.txt
-          
+
           git commit -m "actions [$new_version] "$'\n'"Build: [${{ env.BUILD_VER }}] >> [$new_version]"
-          git push origin HEAD:master
+          git push origin HEAD:main
