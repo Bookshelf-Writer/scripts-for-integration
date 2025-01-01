@@ -11,10 +11,12 @@
 - [push](push-hook.sh)
 
 ## Constant generator templates
-- [C](scripts/creator_const_C.sh)
-- [G0](scripts/creator_const_Go.sh)
-- [json](scripts/creator_const_json.sh)
+- [C](creator_const_C.sh)
+- [G0](creator_const_Go.sh)
+- [json](creator_const_json.sh)
 
+## Other generators
+- [G0](creator_dependencies_Go.sh) - project dependency map
 
 ---
 

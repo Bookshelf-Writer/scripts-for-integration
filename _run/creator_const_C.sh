@@ -1,6 +1,5 @@
 #!/bin/bash
-# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/scripts/creator_const_C.sh
-# bash "$script_dir/creator_const_C.sh"
+# Original source: https://github.com/Bookshelf-Writer/scripts-for-integration/blob/main/_run/creator_const_C.sh
 
 dir_path=""
 file_name="const.h"
@@ -8,10 +7,10 @@ file_name="const.h"
 #############################################################################
 #############################################################################
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-values_dir="$(dirname "$script_dir")"
-root_path="$(dirname "$values_dir")"
-values_dir="$values_dir/values"
+run_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+values_dir="$run_dir/values"
+script_dir="$run_dir/scripts"
+root_path=$(cd "$run_dir/.." && pwd)
 
 DATE_NOW=$(date +"%m-%d-%Y")
 KEY_CRYPT=$(cat "$values_dir/key_crypt.txt")
